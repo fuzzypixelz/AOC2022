@@ -9,3 +9,11 @@ Here we go again :)
 - It was interesting how the second question reduces to the first.
 - I may have overdone it with the types.
 - Still relatively easy.
+
+## Day 3
+
+- I wrote much less code today.
+- I was surprised to see that the difference between the first and second
+  questions is nothing more than the difference between _splitting_ rucksacks
+  in half and _chunking_ rucksacks into groups of three.
+- Why did F# remove Character Range Matches?

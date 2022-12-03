@@ -35,11 +35,11 @@ let roundScore round =
     let outcomeScore =
         match (round.Player, round.Opponent) with
         // Win
-        | (Rock, Scissors)
-        | (Scissors, Paper)
-        | (Paper, Rock) -> 6
+        | Rock, Scissors
+        | Scissors, Paper
+        | Paper, Rock -> 6
         // Draw
-        | (p, o) when p = o -> 3
+        | p, o when p = o -> 3
         // Loss
         | _ -> 0
 
