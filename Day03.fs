@@ -6,9 +6,8 @@ let input = File.ReadAllLines "data/input03.txt"
 
 let items = input |> Array.map (fun s -> s.ToCharArray())
 
-let intersection iss =
-    Array.head iss
-    |> Array.find (fun i -> Array.forall (Array.contains i) (Array.tail iss))
+let intersection: char[][] -> char =
+    Array.map Set.ofArray >> Set.intersectMany >> Set.minElement
 
 let priority =
     function
