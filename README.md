@@ -1,4 +1,4 @@
-# Advent Of Code 2022: Stick-To-F# Edition
+# Advent Of Code 2022: Stick-to-F# Edition
 
 ## Day 1
 
@@ -17,3 +17,9 @@ Here we go again :)
   questions is nothing more than the difference between _splitting_ rucksacks
   in half and _chunking_ rucksacks into groups of three.
 - Why did F# remove Character Range Matches?
+
+## Day 4
+
+- F# interactive programming is very practical, could be faster.
+- Not sure if using FParsec here is overkill.
+- I got the `Assignment.Overlapping` function wrong many times.
