@@ -1,5 +1,3 @@
-module AOC2022.Day01
-
 open System.IO
 
 let input = File.ReadAllText "data/input01.txt"
