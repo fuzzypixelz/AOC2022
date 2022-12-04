@@ -22,4 +22,4 @@ Here we go again :)
 
 - F# interactive programming is very practical, could be faster.
 - Not sure if using FParsec here is overkill.
-- I got the `Assignment.Overlapping` function wrong many times.
+- I got the `Assignment.AreOverlapping` function wrong many times.

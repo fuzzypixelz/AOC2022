@@ -8,16 +8,16 @@ type Assignment(start: uint32, end_: uint32) =
     member self.Start = start
     member self.End = end_
 
-    static member SubsetOf(self: Assignment, other: Assignment) =
-        self.Start <= other.Start && other.End <= self.End
-
-    static member Contained(self: Assignment, other: Assignment) =
-        Assignment.SubsetOf(self, other) || Assignment.SubsetOf(other, self)
-
     member self.Contains(section: uint32) =
         self.Start <= section && section <= self.End
 
-    static member Overlapping(self: Assignment, other: Assignment) =
+    member self.Contains(other: Assignment) =
+        self.Start <= other.Start && other.End <= self.End
+
+    static member AreFullyOverlapping(self: Assignment, other: Assignment) =
+        self.Contains(other) || other.Contains(self)
+
+    static member AreOverlapping(self: Assignment, other: Assignment) =
         (*
             [      [----]            ]
             s      s'   e            e'
@@ -33,16 +33,12 @@ let assignment: Parser<Assignment, unit> =
 let pair: Parser<Assignment * Assignment, unit> =
     tuple2 (assignment .>> pstring ",") assignment
 
-let sections =
-    runParserOnFile (many (pair .>> newline)) () "data/input04.txt" (System.Text.ASCIIEncoding())
-    |> function
-        | Success(i, _, _) -> Array.ofList i
-        | Failure(e, _, _) -> failwith e
+let input = runParserOnFile' (many (pair .>> newline)) "data/input04.txt"
 
-Array.filter Assignment.Contained sections
+Array.filter Assignment.AreFullyOverlapping input
 |> Array.length
 |> partOne "In how many assignment pairs does one range fully contain the other?"
 
-Array.filter Assignment.Overlapping sections
+Array.filter Assignment.AreOverlapping input
 |> Array.length
 |> partTwo "In how many assignment pairs do the ranges overlap?"
