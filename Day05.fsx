@@ -6,7 +6,7 @@ open FParsec
 
 type Crate = char
 type Stack = int
-type Cargo = Map<Stack, List<Crate>>
+type Cargo = List<Crate>[] // map Stack to List<Crate>
 type Instr = { Count: int; From: Stack; To: Stack }
 type Crane = Cargo * List<Instr> -> Cargo
 
@@ -18,8 +18,8 @@ let crate: Parser<Option<Crate>> =
 let cargo: Parser<Cargo> =
     many1 (sepBy1 crate spc .>> newline)
     |>> List.transpose
-    |>> List.mapi (fun i cs -> (i, List.choose id cs))
-    |>> Map.ofSeq
+    |>> List.map (List.choose id)
+    |>> Array.ofList
 
 let labels: Parser<unit> = skipManyTill anyChar newline .>> newline // useless!
 
@@ -42,28 +42,20 @@ let instrs: Parser<List<Instr>> =
 let procedure: Parser<Cargo * List<Instr>> = cargo .>> labels .>>. instrs .>> eof
 
 let crane variant procedure =
-    let oneStep cargo { Count = c; From = f; To = t } =
-        cargo
-        |> Map.map (fun i cs ->
-            if i = f then
-                List.skip c cs
-            elif i = t then
-                let cs' =
-                    Map.find f cargo
-                    |> List.take c
-                    // transform moving crates
-                    |> variant
+    let oneStep (cargo: Cargo) { Count = c; From = f; To = t } =
+        Array.mapi
+        <| function
+            | i when i = f -> List.skip c
+            | i when i = t -> List.append (List.take c cargo[f] |> variant)
+            | _ -> id
+        <| cargo
 
-                List.append cs' cs
-            else
-                cs)
-
-    procedure ||> Seq.fold oneStep
+    procedure ||> List.fold oneStep
 
 let crane9000: Crane = crane List.rev
 let crane9001: Crane = crane id
 
-let reduce: Cargo -> string = Map.values >> Seq.map List.head >> String.Concat
+let reduce: Cargo -> string = Array.map List.head >> String.Concat
 
 let input = runParserOnFile' procedure "data/input05.txt"
 
