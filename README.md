@@ -23,3 +23,10 @@ Here we go again :)
 - F# interactive programming is very practical, could be faster.
 - Not sure if using FParsec here is overkill.
 - I got the `Assignment.AreOverlapping` function wrong many times.
+
+## Day 5
+
+- Most of the time was spent parsing; the stack numbers were useless.
+- One can write a generic crane that works for both parts with Dependency
+  Injection.
+- In F# `String.concat` and `String.Concat` are very different.

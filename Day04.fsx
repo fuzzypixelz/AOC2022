@@ -33,7 +33,8 @@ let assignment: Parser<Assignment, unit> =
 let pair: Parser<Assignment * Assignment, unit> =
     tuple2 (assignment .>> pstring ",") assignment
 
-let input = runParserOnFile' (many (pair .>> newline)) "data/input04.txt"
+let input =
+    runParserOnFile' (many (pair .>> newline) |>> Array.ofList) "data/input04.txt"
 
 Array.filter Assignment.AreFullyOverlapping input
 |> Array.length
