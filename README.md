@@ -30,3 +30,8 @@ Here we go again :)
 - One can write a generic crane that works for both parts with Dependency
   Injection.
 - In F# `String.concat` and `String.Concat` are very different.
+
+## Day 6
+
+- `Array.windowed` is cool.
+- Easiest problem yet?
