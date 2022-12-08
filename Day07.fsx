@@ -2,7 +2,6 @@
 
 open System
 open System.Collections.Generic
-open System.Text.RegularExpressions
 open Common
 
 type File = { Name: string; Size: int }
@@ -35,33 +34,20 @@ let input =
 
     let mutable fs = root
 
-    let ls = Regex @"^\$ ls$"
-    let cd = Regex @"^\$ cd (\w+|\/|\.+)$"
-
-    let mkdir = Regex @"^dir (.+)$"
-    let touch = Regex @"^(\d+) (.+)$"
-
     for line in IO.File.ReadLines "data/input07.txt" do
-        if ls.IsMatch line then
-            ()
-        elif cd.IsMatch line then
-            fs <-
-                match cd.Match(line).Groups[1].Value with
-                | "/" -> root
-                | ".." -> fs.Parent
-                | name -> fs.Subdirectories.Find(fun dir -> dir.Name = name)
-        elif mkdir.IsMatch line then
+        match line.Split " " with
+        | [| "$"; "ls" |] -> ()
+        | [| "$"; "cd"; "/" |] -> fs <- root
+        | [| "$"; "cd"; ".." |] -> fs <- fs.Parent
+        | [| "$"; "cd"; name |] -> fs <- fs.Subdirectories.Find(fun dir -> dir.Name = name)
+        | [| "dir"; dir |] ->
             fs.Subdirectories.Add
-                { Name = mkdir.Match(line).Groups[1].Value
+                { Name = dir
                   Parent = fs
                   Files = List()
                   Subdirectories = List() }
-        elif touch.IsMatch line then
-            fs.Files.Add
-                { Name = touch.Match(line).Groups[2].Value
-                  Size = int touch.Match(line).Groups[1].Value }
-        else
-            failwith $"invalid input: {line}"
+        | [| size; name |] -> fs.Files.Add { Name = name; Size = int size }
+        | _ -> failwith $"invalid input: {line}"
 
     root
 
