@@ -35,3 +35,9 @@ Here we go again :)
 
 - `Array.windowed` is cool.
 - Easiest problem yet?
+
+## Day 7
+
+- Parsing a non-persistent tree with FParsec went very wrong; Regex isn't so
+  bad.
+- Hardest problem yet?
